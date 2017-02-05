@@ -1,0 +1,16 @@
+# nginx on alpine
+FROM nginx:1.11-alpine
+
+# producer
+MAINTAINER osechiman
+# <osechiman@gmail.com>
+
+# package update
+RUN apk update
+
+# timezone asai/Tokyo
+RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && apk del tzdata
+
+# language setting
+RUN echo "export LC_ALL=jp_JP.UTF-8 >> /etc/profile && \
+    echo "export LANGUAGE=jp_JP.UTF-8 >> /etc/profile

@@ -1,0 +1,56 @@
+# Let dein manage dein
+[[plugins]] # Required:
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'Shougo/neocomplete.vim'
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'Shougo/vimshell'
+
+[[plugins]] # Unite
+repo = 'Shougo/unite.vim'
+
+[[plugins]] # Filer
+repo = 'Shougo/vimfiler'
+
+[[plugins]] # Async vim command
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+
+[[plugins]] # Markdown
+repo = 'plasticboy/vim-markdown'
+on_ft = ['md', 'markdown']
+
+[[plugins]] # Markdown
+repo = 'kannokanno/previm'
+on_ft = ['md', 'markdown']
+
+[[plugins]] # Markdown
+repo = 'tyru/open-browser.vim'
+on_ft = ['md', 'markdown']
+
+[[plugins]] # Golang
+repo = 'fatih/vim-go'
+on_ft  = 'go'
+
+[[plugins]] # Git
+repo = 'tpope/vim-fugitive'
+
+[[plugins]] # Power up status line
+repo = 'itchyny/lightline.vim'
+
+[[plugins]] # Color scheme Molokai
+repo = 'tomasr/molokai'
+
+[[plugins]] # Can able git grep
+repo = 'lambdalisue/unite-grep-vcs'
+
+[[plugins]] # Docker sytax
+repo = 'ekalinin/Dockerfile.vim'
