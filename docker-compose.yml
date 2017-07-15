@@ -1,37 +1,27 @@
 version: '2'
 
 services:
-  mysql-golang:
-    container_name: relay-novel-mysql
+  reverse-proxy:
+    container_name: relay-novel-nginx-routing
     build:
       context: .
-      dockerfile: ./Dockerfiles/Dockerfile-mysql
-    volumes:
-      - ./config/mysql:/docker-entrypoint-initdb.d
-    environment:
-      - MYSQL_DATABASE=bookshelf
-      - MYSQL_USER=editor
-      - MYSQL_PASSWORD=edit
-      - MYSQL_ROOT_PASSWORD=osechiman
-
-  golang:
-    container_name: relay-novel-golang
-    build:
-      context: .
-      dockerfile: ./Dockerfiles/Dockerfile-golang
-    depends_on:
-      - mysql-golang
-    links:
-      - mysql-golang:mysql
-
-  nginx-golang:
-    container_name: relay-novel-nginx
-    build:
-      context: .
-      dockerfile: ./Dockerfiles/Dockerfile-nginx
+      dockerfile: ./Dockerfiles/Dockerfile.nginx-routing
     ports:
       - "8080:80"
-    depends_on:
-      - golang
-    links:
-      - golang:golang
+      - "443:443"
+
+  novels-api:
+    container_name: relay-novel-novels-api
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.novels-api
+    env_file: ./config/mysql/.env
+
+  sql-proxy:
+    container_name: relay-novel-mysql-proxy
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.sql-proxy
+    volumes:
+      - /cloudsql:/cloudsql
+      - ./config/mysql/key/RelayNovel-2e8905f05fd5.json:/config

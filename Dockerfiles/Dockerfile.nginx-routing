@@ -1,9 +1,7 @@
-# nginx on alpine
-FROM nginx:1.11-alpine
+FROM nginx:1.13.3-alpine
+LABEL maintainer "osechiman@gmail.com"
 
-# producer
-MAINTAINER osechiman
-# <osechiman@gmail.com>
+COPY config/nginx/api-reverse-proxy.conf /etc/nginx/conf.d/default.conf
 
 # package update
 RUN apk update
@@ -14,3 +12,4 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && apk de
 # language setting
 RUN echo "export LC_ALL=jp_JP.UTF-8 >> /etc/profile && \
     echo "export LANGUAGE=jp_JP.UTF-8 >> /etc/profile
+
