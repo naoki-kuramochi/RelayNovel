@@ -2,7 +2,7 @@ version: '2'
 
 services:
   reverse-proxy:
-    container_name: relay-novel-nginx-routing
+    container_name: nginx-routing
     build:
       context: .
       dockerfile: ./Dockerfiles/Dockerfile.nginx-routing
@@ -11,14 +11,14 @@ services:
       - "443:443"
 
   novels-api:
-    container_name: relay-novel-novels-api
+    container_name: novels-api
     build:
       context: .
       dockerfile: ./Dockerfiles/Dockerfile.novels-api
     env_file: ./config/mysql/.env
 
   sql-proxy:
-    container_name: relay-novel-mysql-proxy
+    container_name: mysql-proxy
     build:
       context: .
       dockerfile: ./Dockerfiles/Dockerfile.sql-proxy
