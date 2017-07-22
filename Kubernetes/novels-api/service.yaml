@@ -1,19 +1,14 @@
 apiVersion: version:1
 kind: Service
 metadata:
-  name: nginx-routing
+  name: novels-api
   labels:
-    app: nginx
-    name: nginx-routing
-    role: reverse-proxy
+    app: golang
+    name: novels-api
+    role: api
 spec:
   ports:
     # the port that this service should serve on
   - port: 80
-    targetPort: 80
-  - port: 443
-    targetPort: 443
   selector:
-    app: nginx
     name: nginx-routing
-    role: reverse-proxy

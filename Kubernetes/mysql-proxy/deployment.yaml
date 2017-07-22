@@ -11,7 +11,7 @@ metadata:
 spec:
   # this replicas value is default
   # modify it according to your case
-  replicas: 3
+  replicas: 1
   # selector can be applied automatically
   # from the labels in the pod template if not set
   # selector:
@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: mysql-proxy
-        image: asia.gcr.io/relaynovel-173804/reverse-proxy:7f53d83f8467ceb3dcdccac830e5e51a3c92f857
+        image: asia.gcr.io/relaynovel-173804/sql-proxy:fc7625462db43b957540a03c75224d7b47d6c508
         resources:
           requests:
             cpu: 100m

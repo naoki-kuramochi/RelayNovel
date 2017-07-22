@@ -1,19 +1,13 @@
-apiVersion: version:1
+apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-routing
+  name: mysql-proxy
   labels:
-    app: nginx
-    name: nginx-routing
-    role: reverse-proxy
+    app: mysql
+    name: mysql-proxy
+    role: sql-proxy
 spec:
   ports:
-    # the port that this service should serve on
-  - port: 80
-    targetPort: 80
-  - port: 443
-    targetPort: 443
+  -  port: 3306
   selector:
-    app: nginx
-    name: nginx-routing
-    role: reverse-proxy
+    name: novels-api
