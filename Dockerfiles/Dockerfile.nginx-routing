@@ -1,7 +1,7 @@
 FROM nginx:1.13.3-alpine
 LABEL maintainer "osechiman@gmail.com"
 
-COPY config/nginx/api-reverse-proxy.conf /etc/nginx/conf.d/default.conf
+COPY ./config/nginx/api-reverse-proxy.conf /etc/nginx/conf.d/default.conf
 
 # package update
 RUN apk update

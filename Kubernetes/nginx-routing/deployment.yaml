@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-routing
+  # these labels can be applied automatically
+  # from the labels in the pod template if not set
+  labels:
+    app: nginx
+    name: nginx-routing
+    role: reverse-proxy
+spec:
+  # this replicas value is default
+  # modify it according to your case
+  replicas: 3
+  # selector can be applied automatically
+  # from the labels in the pod template if not set
+  # selector:
+  #   matchLabels:
+  #     app: guestbook
+  #     role: master
+  #     tier: backend
+  template:
+    metadata:
+      labels:
+        app: nginx
+        name: nginx-routing
+        role: reverse-proxy
+    spec:
+      containers:
+      - name: nginx-routing
+        image: asia.gcr.io/relaynovel-173804/reverse-proxy:7f53d83f8467ceb3dcdccac830e5e51a3c92f857
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8080
+        - containerPort: 443
+      restartPolicy: OnFailure

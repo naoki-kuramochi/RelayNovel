@@ -24,4 +24,3 @@ services:
       dockerfile: ./Dockerfiles/Dockerfile.sql-proxy
     volumes:
       - /cloudsql:/cloudsql
-      - ./config/mysql/key/RelayNovel-2e8905f05fd5.json:/config
