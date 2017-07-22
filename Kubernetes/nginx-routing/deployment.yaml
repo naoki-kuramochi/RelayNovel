@@ -11,7 +11,7 @@ metadata:
 spec:
   # this replicas value is default
   # modify it according to your case
-  replicas: 3
+  replicas: 2
   # selector can be applied automatically
   # from the labels in the pod template if not set
   # selector:
@@ -28,11 +28,11 @@ spec:
     spec:
       containers:
       - name: nginx-routing
-        image: asia.gcr.io/relaynovel-173804/reverse-proxy:7f53d83f8467ceb3dcdccac830e5e51a3c92f857
+        image: asia.gcr.io/relaynovel-173804/reverse-proxy:276f1daf2c4b8ef0d1f8c86b633626bbfcdd1ea8
         resources:
           requests:
             cpu: 100m
-            memory: 100Mi
+            memory: 40Mi
         ports:
         - containerPort: 80
         - containerPort: 443

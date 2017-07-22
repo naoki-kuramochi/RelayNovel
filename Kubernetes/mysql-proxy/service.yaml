@@ -10,4 +10,4 @@ spec:
   ports:
   -  port: 3306
   selector:
-    name: novels-api
+    name: mysql-proxy

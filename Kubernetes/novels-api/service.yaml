@@ -11,4 +11,4 @@ spec:
     # the port that this service should serve on
   - port: 80
   selector:
-    name: nginx-routing
+    name: novels-api
