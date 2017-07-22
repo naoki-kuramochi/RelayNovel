@@ -1,8 +1,8 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/relay-novel/relaynovel_reverse-proxy', '-f', './Dockerfiles/Dockerfile.nginx-routing', '.']
+  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/reverse-proxy:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.nginx-routing', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/relay-novel/relaynovel_novels-api', '-f', './Dockerfiles/Dockerfile.novels-api', '.']
+  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/novels-api:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.novels-api', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/relay-novel/relaynovel_sql-proxy', '-f', './Dockerfiles/Dockerfile.sql-proxy', '.']
-images: ['gcr.io/relay-novel/relaynovel_reverse-proxy', 'gcr.io/relay-novel/relaynovel_novels-api', 'gcr.io/relay-novel/relaynovel_sql-proxy']
+  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.sql-proxy', '.']
+images: ['asia.gcr.io/$PROJECT_ID/reverse-proxy:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/novels-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA']
