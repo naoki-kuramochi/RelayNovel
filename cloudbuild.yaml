@@ -1,0 +1,8 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/relay-novel/relaynovel_reverse-proxy', '-f', './Dockerfiles/Dockerfile.nginx-routing', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/relay-novel/relaynovel_novels-api', '-f', './Dockerfiles/Dockerfile.novels-api', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/relay-novel/relaynovel_sql-proxy', '-f', './Dockerfiles/Dockerfile.sql-proxy', '.']
+images: ['gcr.io/relay-novel/relaynovel_reverse-proxy', 'gcr.io/relay-novel/relaynovel_novels-api', 'gcr.io/relay-novel/relaynovel_sql-proxy']
