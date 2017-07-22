@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: novels-api
-        image: asia.gcr.io/relaynovel-173804/novels-api:fc7625462db43b957540a03c75224d7b47d6c508
+        image: asia.gcr.io/relaynovel-173804/novels-api:276f1daf2c4b8ef0d1f8c86b633626bbfcdd1ea8
         env:
         - name: DB_USER
           value: root
