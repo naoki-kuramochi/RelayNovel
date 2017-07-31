@@ -126,7 +126,7 @@ INSERT INTO `RelayNovel`.`novel`(`title`, `genre_id`, `summary`, `relay_limit`, 
 INSERT INTO `RelayNovel`.`sentence`(`novel_id`, `novelist_id`, `first_line`, `second_line`) values(1, 1, 'first_line', 'second_line');
 INSERT INTO `RelayNovel`.`sentence`(`novel_id`, `novelist_id`, `first_line`, `second_line`) values(1, 2, 'third_line', 'force_line');
 
--- review 
+-- review
 INSERT INTO `RelayNovel`.`review`(`novel_id`, `fan_id`, `favorite`, `funny`, `interesting`, `sad`) values(1, 1, 1, 0, 0, 0);
 
 -- tag2novel

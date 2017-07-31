@@ -16,15 +16,21 @@ type (
 	}
 
 	novel struct {
-		Id           uint16     `json:"id" db:"id"`       // not null
+		ID           uint16     `json:"id" db:"id"`       // not null
 		Title        string     `json:"title" db:"title"` // not null
-		GenreId      uint16     `json:"genre_id" db:"genre_id"`
+		GenreID      uint16     `json:"genre_id" db:"genre_id"`
 		Summary      string     `json:"summary" db:"summary"`             // not null
 		RelayLimit   uint16     `json:"relay_limit" db:"relay_limit"`     // not null
-		NovelistId   uint16     `json:"novelist_id" db:"novelist_id"`     // not null
+		NovelistID   uint16     `json:"novelist_id" db:"novelist_id"`     // not null
 		FirstEdition string     `json:"first_edition" db:"first_edition"` // not null
 		NovelistName string     `json:"novelist" db:"name"`               // not null
 		Sentence     []sentence `json:"sentence"`
+	}
+
+	response struct {
+		Status  int    `json:"status"`
+		Message string `json:"message"`
+		Data    novel  `json:"data"`
 	}
 )
 
@@ -41,16 +47,26 @@ func main() {
 
 		// get a record
 		var novel novel
-		andCondition := dbr.And(dbr.Eq("novel.id", id))
-		session.Select("novel.id", "novel.title", "novel.genre_id", "novel.summary", "novel.relay_limit", "novel.novelist_id", "novel.first_edition", "novelist.name").From("novel").Join("novelist", "novel.novelist_id = novelist.id").Where(andCondition).Load(&novel)
-
 		var sentence []sentence
-		session.Select("sentence.first_line", "sentence.second_line", "sentence.revision").From("sentence").Where("sentence.novel_id = ?", id).OrderBy("sentence.revision").Load(&sentence)
-
 		novel.Sentence = sentence
+		andCondition := dbr.And(dbr.Eq("novel.id", id))
+
+		count, err := session.Select("novel.id", "novel.title", "novel.genre_id", "novel.summary", "novel.relay_limit", "novel.novelist_id", "novel.first_edition", "novelist.name").From("novel").Join("novelist", "novel.novelist_id = novelist.id").Where(andCondition).Load(&novel)
+
+		if err != nil {
+			panic(err.Error())
+		}
+		if count == 0 {
+			errorResponse := response{Status: http.StatusNotFound, Message: http.StatusText(http.StatusNotFound), Data: novel}
+			return c.JSON(http.StatusNotFound, errorResponse)
+		}
+
+		session.Select("sentence.first_line", "sentence.second_line", "sentence.revision").From("sentence").Where("sentence.novel_id = ?", id).OrderBy("sentence.revision").Load(&novel.Sentence)
+
+		response := response{Status: http.StatusOK, Message: http.StatusText(http.StatusOK), Data: novel}
 
 		// json-ready, with dbr.null* types serialized like you want
-		return c.JSON(http.StatusOK, novel)
+		return c.JSON(http.StatusOK, response)
 	})
 	e.Logger.Fatal(e.Start(":80"))
 }

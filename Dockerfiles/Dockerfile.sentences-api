@@ -2,7 +2,7 @@ FROM golang:1.8-alpine
 LABEL maintainer "osechiman@gmail.com"
 
 WORKDIR /go/src/app
-COPY app/api/novels/novels.go .
+COPY app/api/novels/sentences/sentences.go .
 
 # package update
 RUN apk update

@@ -4,5 +4,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/novels-api:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.novels-api', '.']
 - name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/sentences-api:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.sentences-api', '.']
+- name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.sql-proxy', '.']
-images: ['asia.gcr.io/$PROJECT_ID/reverse-proxy:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/novels-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA']
+images: ['asia.gcr.io/$PROJECT_ID/reverse-proxy:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/novels-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sentences-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA']

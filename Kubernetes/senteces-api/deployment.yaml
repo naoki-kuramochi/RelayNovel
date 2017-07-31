@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sentences-api
+  # these labels can be applied automatically
+  # from the labels in the pod template if not set
+  labels:
+    app: golang
+    name: sentences-api
+    role: api
+spec:
+  # this replicas value is default
+  # modify it according to your case
+  replicas: 2
+  # selector can be applied automatically
+  # from the labels in the pod template if not set
+  # selector:
+  #   matchLabels:
+  #     app: guestbook
+  #     role: master
+  #     tier: backend
+  template:
+    metadata:
+      labels:
+        app: golang
+        name: sentences-api
+        role: api
+    spec:
+      containers:
+      - name: sentences-api
+        image: asia.gcr.io/relaynovel-173804/sentences-api:276f1daf2c4b8ef0d1f8c86b633626bbfcdd1ea8
+        env:
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: Ngj9GbsC9yBHKHOI
+        - name: DB_HOST
+          value: mysql-proxy
+        - name: DATABASE
+          value: RelayNovel
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi

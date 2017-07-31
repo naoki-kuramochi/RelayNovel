@@ -16,6 +16,21 @@ services:
       context: .
       dockerfile: ./Dockerfiles/Dockerfile.novels-api
     env_file: ./config/mysql/.env
+    volumes:
+      #only dev
+      - ./app/api/novels:/go/src/app
+    command: go-wrapper run
+
+  sentences-api:
+    container_name: sentences-api
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.sentences-api
+    env_file: ./config/mysql/.env
+    volumes:
+      #only dev
+      - ./app/api/novels/sentences:/go/src/app
+    command: go-wrapper run
 
   sql-proxy:
     container_name: mysql-proxy
