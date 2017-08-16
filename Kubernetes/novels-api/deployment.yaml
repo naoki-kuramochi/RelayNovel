@@ -28,16 +28,7 @@ spec:
     spec:
       containers:
       - name: novels-api
-        image: asia.gcr.io/relaynovel-173804/novels-api:266d2b240a544dfba126773fc588028ff5a7c435
-        env:
-        - name: DB_USER
-          value: root
-        - name: DB_PASSWORD
-          value: Ngj9GbsC9yBHKHOI
-        - name: DB_HOST
-          value: mysql-proxy
-        - name: DATABASE
-          value: RelayNovel
+        image: asia.gcr.io/relaynovel-173804/novels-api:568635b201aa6d4b045251f05b4e08fc7670c9e1
         resources:
           requests:
             cpu: 100m
