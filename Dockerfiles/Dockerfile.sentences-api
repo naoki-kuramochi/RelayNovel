@@ -12,8 +12,8 @@ RUN apk update
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && apk del tzdata
 
 # language setting
-RUN echo "export LC_ALL=jp_JP.UTF-8 >> /etc/profile && \
-    echo "export LANGUAGE=jp_JP.UTF-8 >> /etc/profile
+RUN echo "export LC_ALL=jp_JP.UTF-8" >> /etc/profile && \
+    echo "export LANGUAGE=jp_JP.UTF-8" >> /etc/profile
 
 # install package
 RUN apk add --virtual=relay-novel \
@@ -22,4 +22,4 @@ RUN apk add --virtual=relay-novel \
 RUN go-wrapper download
 RUN go-wrapper install
 
-CMD ["go-wrapper", "run"]
+CMD ["go-wrapper", "run", "sentences.go"]

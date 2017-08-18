@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/comail/colog"
+	// Mysql driver
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gocraft/dbr"
 	"github.com/labstack/echo"
@@ -32,8 +33,7 @@ func init() {
 	colog.SetDefaultLevel(colog.LDebug)
 	colog.SetMinLevel(colog.LTrace)
 	colog.SetFormatter(&colog.StdFormatter{
-		Colors: true,
-		Flag:   log.Ldate | log.Ltime | log.Lshortfile,
+		Flag: log.Ldate | log.Ltime | log.Lshortfile,
 	})
 	colog.Register()
 }
