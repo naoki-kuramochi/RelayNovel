@@ -1,4 +1,4 @@
-package novels
+package main
 
 import (
 	"fmt"

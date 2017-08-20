@@ -10,15 +10,15 @@ services:
       - "8080:80"
       - "443:443"
 
-#  novels-api:
-#    container_name: novels-api
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfiles/Dockerfile.novels-api
-#    volumes:
-#      #only dev
-#      - ./app/api/novels:/go/src/app
-#    command: go-wrapper run novels.go
+  novels-api:
+    container_name: novels-api
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.novels-api
+    volumes:
+      #only dev
+      - ./app/api/novels:/go/src/app
+    command: go-wrapper run novels.go
 
   sentences-api:
     container_name: sentences-api

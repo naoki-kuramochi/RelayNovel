@@ -1,4 +1,4 @@
-package novels
+package main
 
 import (
 	"github.com/comail/colog"
@@ -15,12 +15,18 @@ import (
 )
 
 type (
+	sentenceApiResponse struct {
+		Status  int        `json:"status"`
+		Message string     `json:"message"`
+		Data    []sentence `json:"data"`
+	}
+
 	sentence struct {
 		FirstLine  string `json:"first_line" db:"first_line"`
 		SecondLine string `json:"second_line" db:"second_line"`
-		Revision   string `json:"revision" db:"revision"`
+		Revision   string `json:"-" db:"revision"`
 		NovelID    int    `json:"-" db:"novel_id"`
-		NovelistID int    `json:"novelist_id" db:"novelist_id"`
+		NovelistID int    `json:"-" db:"novelist_id"`
 	}
 
 	novel struct {
@@ -62,6 +68,7 @@ func main() {
 // getNovels novelの詳細を返却
 func getNovels(c echo.Context) (err error) {
 	id := c.Param("id")
+
 	novel := novel{Sentence: []sentence{}}
 
 	session, err := createSession()
@@ -84,36 +91,32 @@ func getNovels(c echo.Context) (err error) {
 		return c.JSON(http.StatusNotFound, errorResponse(http.StatusNotFound))
 	}
 
-	novel.Sentence, err = fetchSentence(id)
+	sentenceApiResponse, err := fetchSentence(id)
 	if err != nil {
-		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		log.Printf("info: " + err.Error())
+		return c.JSON(http.StatusBadRequest, errorResponse(http.StatusBadRequest))
 	}
 
+	novel.Sentence = sentenceApiResponse.Data
 	response := response{Status: http.StatusOK, Message: http.StatusText(http.StatusOK), Data: novel}
 	return c.JSON(http.StatusOK, response)
 }
 
 // fetchSentence sentencesAPIを実行してdataを取得
-func fetchSentence(int id) (sentence []sentence, err error) {
-	response, err := http.Get("http://sentences-api/novles/sentences/" + id)
+func fetchSentence(id string) (sentenceApiResponse, error) {
+	sentenceApiResponse := sentenceApiResponse{Data: []sentence{}}
+	response, err := http.Get("http://sentences-api/novels/sentences/" + id)
 	defer response.Body.Close()
 	if err != nil {
-		return nil, err
+		return sentenceApiResponse, err
 	}
 
-	var result interface{}
-	err = json.NewDecoder(response.Body).Decode(&result)
+	err = json.NewDecoder(response.Body).Decode(&sentenceApiResponse)
 	if err != nil {
-		return nil, err
+		return sentenceApiResponse, err
 	}
 
-	sentence, err := result.(map[string]interface{})["data"]
-	if err != nil {
-		return nil, err
-	}
-
-	return sentence, nil
+	return sentenceApiResponse, nil
 }
 
 // errorResponse エラー時のレスポンスを生成
