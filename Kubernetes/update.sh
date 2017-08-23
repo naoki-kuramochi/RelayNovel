@@ -1,5 +1,5 @@
 #!/bin/sh
-kubectl update -f senteces-api/deployment.yaml && \
-kubectl update -f novels-api/deployment.yaml && \
-kubectl update -f mysql-proxy/deployment.yaml && \
-kubectl update -f nginx-routing/deployment.yaml
+kubectl replace -f senteces-api/deployment.yaml && \
+kubectl replace -f novels-api/deployment.yaml && \
+kubectl replace -f mysql-proxy/deployment.yaml && \
+kubectl replace -f nginx-routing/deployment.yaml

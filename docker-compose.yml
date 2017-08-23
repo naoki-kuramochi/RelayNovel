@@ -36,4 +36,4 @@ services:
       context: .
       dockerfile: ./Dockerfiles/Dockerfile.sql-proxy
     volumes:
-      - /cloudsql:/cloudsql
+      - ./cloudsql:/cloudsql

@@ -1,0 +1,1 @@
+gcloud container clusters create relay-novel-dev --num-nodes 1 --machine-type f1-micro --zone=asia-northeeset1-a
