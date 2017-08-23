@@ -29,3 +29,7 @@ spec:
       containers:
       - name: novels-api
         image: asia.gcr.io/relaynovel-173804/novels-api:a55220002eb067754f75590963e932926dfe8613
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
