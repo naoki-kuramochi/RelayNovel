@@ -35,4 +35,3 @@ spec:
             memory: 100Mi
         ports:
         - containerPort: 80
-        - containerPort: 443
