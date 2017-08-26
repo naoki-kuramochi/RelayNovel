@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "relaynovel-173804",
+  "private_key_id": "2e8905f05fd50017d53553dd68d88585045c2980",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJ5NU3yZHKXEF8\nbJzRTfuBglCJ2cVsPNhpsZ/mxrJ+KKQwUhBiYxgqjfZ8h8kZcfNx8p84ECTjp8zQ\nScVyxqboxKxA35A+ShQk0GoNYQDNi2Cn3zKnJzjR+ah6YbNw2s5U8TnAxyngOy2E\nI7Do4MeoGHdl1j3TgdbbqN33o1GUI9VoG1cO1sC6+vyLT2BkpfGS+nWHII3tAVBY\nW1L6G+24NZeT2g84mVcA9TutL0eDKojgsk1Iv4u8cOeE9o9Iw/YG/lSPzoxR8HGp\nACVWLUH8zb+iBjSTwWfyEZqRhdHHy7VhbnVpG8seklrb9Dj71Lr6osLT1XQXn8V2\nHd1lTFyRAgMBAAECggEAIVxmvyks+2XzNumGStplTNPeaxOebnGUxnegwd7jb7qs\n0YSTSy6vYkNtuiDV4hZ/m7yeWAKS60C3Cf6mryiUPAeuTv9M3n4Z21t1ABufU6z2\n88ZgoFj4J/o7v2fq4XhxJSgXMFEODQy6S14lGtYfJ8T4iyNeZAIjIXjt9MBP9/ez\nE2OAGBWJb8Cj9+aPeKW3RAztMBVDSapwZ/bk0C8TY2+wFAgXi6vAi68KjZ15K7VR\nBG7fUzIQkO5HhtaYI5nf6hHX7oRhrY3kcNvfgfgo+QRZehdPunUGVCWSdWzGsuP5\nXAz6EQpWHnElY3qJiCD2F+e36lGjP9ZgwIJkAPdK4QKBgQD5jfGaBYVa177RihvI\nu4QKo8j+ZR7kCPbGUhG3Jj8aiGMwBznGjaxwBcz/95Xz9RA1wLEnxHf+LT1h8+xw\n/8aJAsGlE+2kmIei1qJZMjgxPym3T4Ldro2I4lhFiFhL3pF1NSLB+/tIXEg4UDCG\nsCCucCDk/8SJrD3rNJ05QdoSvwKBgQDPG8HEtJZDaBJJD7QkokPBgrsMqw7CT+QZ\ngbvZD1eaVF/n/0oWpvBlUuqvp0ndA7SoX/3Hmm+uxeIQoouv2j8Xkad9G4Q71cl2\nSC2gkZbhDkR4UNr7sxnBN2i9GtjDwoWLYKg5HXfW1YikS9hRV58phLJI0eLUMeph\nX7/zjQV0rwKBgDtKuVOB6kxKJEE+0hkgTGAGyBOBTRSa+J7oEuN0B9wy+XYI0XZW\nZNj819cdKRicaiyLSswLBwNyFjp2rP+wFaip6f5hvL21q8xJuKr+npE805mFH6+x\n8FjMhnKG0Yu9Jsw1QrvaNbrciiAvFUh7AljPtVETX8viC5gdmRlohvqbAoGAI6cx\nmj1ESOJXk4BCkLPmWh+5N5sS9Vxvdfyha+J6QDUaNYP7Kx8d7zNw90AjNQr4RKwR\nshTh+QJTwm1ZArLdfZ8zaBQelXZeMiCGykeF48RjARtaN05DtsFlJHjErB6GgtHm\n474w7SjhVvc/i/E7kxgm4OZQ2BqnsI+dKb4zHD0CgYEAplSKgoB9KmJ/XA/w1bNO\nwRF+zR+pSp3qsjH9X9aLyzNKV/5B+hCnbK3DG4BQ75WlJ7ZRz7UPD62p9QGvymsJ\nu3U8Zb8ku8H3QLsgoOT9IPe3vD2F6Nocb9hScVGBR3a7Ug8MkxltG0kyjBGATs1P\ngquRBbat/lfheahaD7TVY5U=\n-----END PRIVATE KEY-----\n",
+  "client_email": "relay-novel-db@relaynovel-173804.iam.gserviceaccount.com",
+  "client_id": "116946343594368616770",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/relay-novel-db%40relaynovel-173804.iam.gserviceaccount.com"
+}
