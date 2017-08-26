@@ -7,11 +7,12 @@ metadata:
     name: nginx-routing
     role: reverse-proxy
 spec:
+  type: NodePort
   ports:
     # the port that this service should serve on
-  - protocol: TCP
-    name: tcp-80
-    port: 80
-    targetPort: 80
+    - name: nginx-http
+      port: 80
+      targetPort: 80
+      nodePort: 30080
   selector:
     name: nginx-routing
