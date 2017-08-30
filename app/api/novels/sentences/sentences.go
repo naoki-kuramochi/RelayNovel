@@ -8,9 +8,11 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 type (
@@ -26,6 +28,12 @@ type (
 		Status  int        `json:"status"`
 		Message string     `json:"message"`
 		Data    []sentence `json:"data"`
+	}
+
+	errors struct {
+		Status  int           `json:"status"`
+		Message string        `json:"message"`
+		Data    []interface{} `json:"data"`
 	}
 )
 
@@ -56,7 +64,8 @@ func getSentence(c echo.Context) (err error) {
 	session, err := createSession()
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
 	condition := dbr.And(dbr.Eq("sentence.novel_id", id))
@@ -68,10 +77,12 @@ func getSentence(c echo.Context) (err error) {
 		Load(&sentence)
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 	if count == 0 {
-		return c.JSON(http.StatusNotFound, errorResponse(http.StatusNotFound))
+		errors, _ := fetchErrorResponse(http.StatusNotFound)
+		return c.JSON(http.StatusNotFound, errors)
 	}
 
 	response := response{Status: http.StatusOK, Message: http.StatusText(http.StatusOK), Data: sentence}
@@ -86,20 +97,23 @@ func postSentence(c echo.Context) (err error) {
 	err = c.Bind(&insertSentence)
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusBadRequest, errorResponse(http.StatusBadRequest))
+		errors, _ := fetchErrorResponse(http.StatusBadRequest)
+		return c.JSON(http.StatusBadRequest, errors)
 	}
 
 	session, err := createSession()
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
 	// transction
 	transaction, err := session.Begin()
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 	defer transaction.RollbackUnlessCommitted()
 
@@ -110,14 +124,16 @@ func postSentence(c echo.Context) (err error) {
 	// commit
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 	transaction.Commit()
 
 	lastInsertID, err := result.LastInsertId()
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
 	condition := dbr.And(dbr.Eq("sentence.id", lastInsertID))
@@ -128,20 +144,33 @@ func postSentence(c echo.Context) (err error) {
 		Load(&selectSentence)
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 	if count == 0 {
-		return c.JSON(http.StatusNotFound, errorResponse(http.StatusNotFound))
+		errors, _ := fetchErrorResponse(http.StatusNotFound)
+		return c.JSON(http.StatusNotFound, errors)
 	}
 
 	response := response{Status: http.StatusCreated, Message: http.StatusText(http.StatusCreated), Data: selectSentence}
 	return c.JSON(http.StatusCreated, response)
 }
 
-// errorResponse エラー時のレスポンスを生成
-func errorResponse(statusCode int) response {
-	response := response{Status: statusCode, Message: http.StatusText(statusCode), Data: []sentence{}}
-	return response
+// fetchErrorResponse エラー時のレスポンスを生成
+func fetchErrorResponse(statusCode int) (errors, error) {
+	errorsApiResponse := errors{}
+	response, err := http.Get("http://errors-api/" + strconv.Itoa(statusCode))
+	defer response.Body.Close()
+	if err != nil {
+		return errorsApiResponse, err
+	}
+
+	err = json.NewDecoder(response.Body).Decode(&errorsApiResponse)
+	if err != nil {
+		return errorsApiResponse, err
+	}
+
+	return errorsApiResponse, nil
 }
 
 // createSession dbr.Sessionを生成

@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 type (
@@ -30,12 +31,12 @@ type (
 	}
 
 	novel struct {
-		ID           uint16     `json:"id" db:"id"`       // not null
+		ID           int        `json:"id" db:"id"`       // not null
 		Title        string     `json:"title" db:"title"` // not null
-		GenreID      uint16     `json:"genre_id" db:"genre_id"`
+		GenreID      int        `json:"genre_id" db:"genre_id"`
 		Summary      string     `json:"summary" db:"summary"`             // not null
-		RelayLimit   uint16     `json:"relay_limit" db:"relay_limit"`     // not null
-		NovelistID   uint16     `json:"novelist_id" db:"novelist_id"`     // not null
+		RelayLimit   int        `json:"relay_limit" db:"relay_limit"`     // not null
+		NovelistID   int        `json:"novelist_id" db:"novelist_id"`     // not null
 		FirstEdition string     `json:"first_edition" db:"first_edition"` // not null
 		NovelistName string     `json:"novelist" db:"name"`               // not null
 		Sentence     []sentence `json:"sentence"`
@@ -45,6 +46,12 @@ type (
 		Status  int    `json:"status"`
 		Message string `json:"message"`
 		Data    novel  `json:"data"`
+	}
+
+	errors struct {
+		Status  int           `json:"status"`
+		Message string        `json:"message"`
+		Data    []interface{} `json:"data"`
 	}
 )
 
@@ -74,7 +81,8 @@ func getNovels(c echo.Context) (err error) {
 	session, err := createSession()
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
 	andCondition := dbr.And(dbr.Eq("novel.id", id))
@@ -85,16 +93,19 @@ func getNovels(c echo.Context) (err error) {
 		Load(&novel)
 	if err != nil {
 		log.Printf("alert: " + err.Error())
-		return c.JSON(http.StatusInternalServerError, errorResponse(http.StatusInternalServerError))
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
 	}
 	if count == 0 {
-		return c.JSON(http.StatusNotFound, errorResponse(http.StatusNotFound))
+		errors, _ := fetchErrorResponse(http.StatusNotFound)
+		return c.JSON(http.StatusNotFound, errors)
 	}
 
 	sentenceApiResponse, err := fetchSentence(id)
 	if err != nil {
 		log.Printf("info: " + err.Error())
-		return c.JSON(http.StatusBadRequest, errorResponse(http.StatusBadRequest))
+		errors, _ := fetchErrorResponse(http.StatusBadRequest)
+		return c.JSON(http.StatusBadRequest, errors)
 	}
 
 	novel.Sentence = sentenceApiResponse.Data
@@ -119,12 +130,21 @@ func fetchSentence(id string) (sentenceApiResponse, error) {
 	return sentenceApiResponse, nil
 }
 
-// errorResponse エラー時のレスポンスを生成
-func errorResponse(statusCode int) response {
-	novel := novel{}
-	novel.Sentence = []sentence{}
-	response := response{Status: statusCode, Message: http.StatusText(statusCode), Data: novel}
-	return response
+// fetchErrorResponse エラー時のレスポンスを生成
+func fetchErrorResponse(statusCode int) (errors, error) {
+	errorsApiResponse := errors{}
+	response, err := http.Get("http://errors-api/" + strconv.Itoa(statusCode))
+	defer response.Body.Close()
+	if err != nil {
+		return errorsApiResponse, err
+	}
+
+	err = json.NewDecoder(response.Body).Decode(&errorsApiResponse)
+	if err != nil {
+		return errorsApiResponse, err
+	}
+
+	return errorsApiResponse, nil
 }
 
 // createSession dbr.Sessionを生成
