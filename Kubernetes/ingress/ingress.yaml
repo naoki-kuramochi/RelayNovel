@@ -3,8 +3,15 @@ kind: Ingress
 metadata:
   name: ingress
   annotations:
-      kubernetes.io/ingress.global-static-ip-name: "ingress-ip"
+    kubernetes.io/ingress.global-static-ip-name: "ingress-ip"
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "gce"
 spec:
+  tls:
+  - hosts:
+    - relay-novel.work
+    - api.relay-novel.work
+    secretName: ingress-tls
   backend:
     serviceName: nginx-routing
     servicePort: 80

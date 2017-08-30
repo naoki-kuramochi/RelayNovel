@@ -1,0 +1,24 @@
+FROM golang:1.8-alpine
+LABEL maintainer "osechiman@gmail.com"
+
+WORKDIR /go/src/app
+COPY app/api/errors/errors.go .
+
+# package update
+RUN apk update
+
+# timezone asai/Tokyo
+RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && apk del tzdata
+
+# language setting
+RUN echo "export LC_ALL=jp_JP.UTF-8" >> /etc/profile && \
+    echo "export LANGUAGE=jp_JP.UTF-8" >> /etc/profile
+
+# install package
+RUN apk add --virtual=relay-novel \
+    git
+
+RUN go-wrapper download
+RUN go-wrapper install
+
+CMD ["go-wrapper", "run", "sentences.go"]

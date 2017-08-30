@@ -30,6 +30,16 @@ services:
       - ./app/api/novels/sentences:/go/src/app
     command: go-wrapper run sentences.go
 
+  errors-api:
+    container_name: errors-api
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.errors-api
+    volumes:
+      #only dev
+      - ./app/api/errors:/go/src/app
+    command: go-wrapper run errors.go
+
   sql-proxy:
     container_name: mysql-proxy
     build:
