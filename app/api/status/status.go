@@ -32,9 +32,7 @@ func main() {
 	e.Use(middleware.Logger())
 
 	e.GET("/:id", httpResponse)
-	e.POST("/:id", httpResponse)
 	e.GET("/status/:id", httpResponse)
-	e.POST("/status/:id", httpResponse)
 
 	e.Logger.Fatal(e.Start(":80"))
 }
