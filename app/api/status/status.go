@@ -31,16 +31,16 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 
-	e.GET("/:id", errorResponse)
-	e.POST("/:id", errorResponse)
-	e.GET("/errors/:id", errorResponse)
-	e.POST("/errors/:id", errorResponse)
+	e.GET("/:id", httpResponse)
+	e.POST("/:id", httpResponse)
+	e.GET("/errors/:id", httpResponse)
+	e.POST("/errors/:id", httpResponse)
 
 	e.Logger.Fatal(e.Start(":80"))
 }
 
-// errorResponse エラー時のレスポンスを返す
-func errorResponse(c echo.Context) (err error) {
+// httpResponse エラー時のレスポンスを返す
+func httpResponse(c echo.Context) (err error) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		id = http.StatusNotFound

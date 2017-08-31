@@ -133,7 +133,7 @@ func fetchSentence(id string) (sentenceApiResponse, error) {
 // fetchErrorResponse エラー時のレスポンスを生成
 func fetchErrorResponse(statusCode int) (errors, error) {
 	errorsApiResponse := errors{}
-	response, err := http.Get("http://errors-api/" + strconv.Itoa(statusCode))
+	response, err := http.Get("http://status-api/" + strconv.Itoa(statusCode))
 	defer response.Body.Close()
 	if err != nil {
 		return errorsApiResponse, err

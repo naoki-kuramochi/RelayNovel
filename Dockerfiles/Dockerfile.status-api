@@ -2,7 +2,7 @@ FROM golang:1.8-alpine
 LABEL maintainer "osechiman@gmail.com"
 
 WORKDIR /go/src/app
-COPY app/api/errors/errors.go .
+COPY app/api/status/status.go .
 
 # package update
 RUN apk update

@@ -8,5 +8,5 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.sql-proxy', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/errors-api:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.errors-api', '.']
-images: ['asia.gcr.io/$PROJECT_ID/reverse-proxy:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/novels-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sentences-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/errors-api:$COMMIT_SHA']
+  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/status-api:$COMMIT_SHA', '-f', './Dockerfiles/Dockerfile.status-api', '.']
+images: ['asia.gcr.io/$PROJECT_ID/reverse-proxy:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/novels-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sentences-api:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/sql-proxy:$COMMIT_SHA', 'asia.gcr.io/$PROJECT_ID/status-api:$COMMIT_SHA']
