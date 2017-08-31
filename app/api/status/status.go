@@ -33,8 +33,8 @@ func main() {
 
 	e.GET("/:id", httpResponse)
 	e.POST("/:id", httpResponse)
-	e.GET("/errors/:id", httpResponse)
-	e.POST("/errors/:id", httpResponse)
+	e.GET("/status/:id", httpResponse)
+	e.POST("/status/:id", httpResponse)
 
 	e.Logger.Fatal(e.Start(":80"))
 }
