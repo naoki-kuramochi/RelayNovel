@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: sentences-api
-        image: asia.gcr.io/relaynovel-173804/sentences-api:6d6a8bd1757cb213374abeb782f4299dd654f13f
+        image: asia.gcr.io/relaynovel-173804/sentences-api:3bf27e67620910780f00215a8ac853cc70de67ce
         resources:
           requests:
             cpu: 100m
