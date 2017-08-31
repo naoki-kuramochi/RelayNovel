@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: mysql-proxy
-        image: asia.gcr.io/relaynovel-173804/sql-proxy:COMMIT_HASH
+        image: asia.gcr.io/relaynovel-173804/sql-proxy:COMMIT_SHA
         resources:
           requests:
             cpu: 100m

@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: errors-api
-        image: asia.gcr.io/relaynovel-173804/errors-api:COMMIT_HASH
+        image: asia.gcr.io/relaynovel-173804/errors-api:COMMIT_SHA
         resources:
           requests:
             cpu: 100m

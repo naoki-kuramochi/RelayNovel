@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: nginx-routing
-        image: asia.gcr.io/relaynovel-173804/reverse-proxy:COMMIT_HASH
+        image: asia.gcr.io/relaynovel-173804/reverse-proxy:COMMIT_SHA
         resources:
           requests:
             cpu: 100m
