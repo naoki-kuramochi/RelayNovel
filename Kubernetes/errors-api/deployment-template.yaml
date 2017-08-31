@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: novels-api
+  name: errors-api
   # these labels can be applied automatically
   # from the labels in the pod template if not set
   labels:
     app: golang
-    name: novels-api
+    name: errors-api
     role: api
 spec:
   # this replicas value is default
@@ -23,12 +23,12 @@ spec:
     metadata:
       labels:
         app: golang
-        name: novels-api
+        name: errors-api
         role: api
     spec:
       containers:
-      - name: novels-api
-        image: asia.gcr.io/relaynovel-173804/novels-api:f0244f6db6e2dd79bed61733ed60d24d467bbc52
+      - name: errors-api
+        image: asia.gcr.io/relaynovel-173804/errors-api:COMMIT_HASH
         resources:
           requests:
             cpu: 100m

@@ -1,13 +1,13 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: novels-api
+  name: nginx-routing
   # these labels can be applied automatically
   # from the labels in the pod template if not set
   labels:
-    app: golang
-    name: novels-api
-    role: api
+    app: nginx
+    name: nginx-routing
+    role: reverse-proxy
 spec:
   # this replicas value is default
   # modify it according to your case
@@ -22,14 +22,16 @@ spec:
   template:
     metadata:
       labels:
-        app: golang
-        name: novels-api
-        role: api
+        app: nginx
+        name: nginx-routing
+        role: reverse-proxy
     spec:
       containers:
-      - name: novels-api
-        image: asia.gcr.io/relaynovel-173804/novels-api:f0244f6db6e2dd79bed61733ed60d24d467bbc52
+      - name: nginx-routing
+        image: asia.gcr.io/relaynovel-173804/reverse-proxy:COMMIT_HASH
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
+        ports:
+        - containerPort: 80

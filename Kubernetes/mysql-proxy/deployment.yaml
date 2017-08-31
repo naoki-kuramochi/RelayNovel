@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: mysql-proxy
-        image: asia.gcr.io/relaynovel-173804/sql-proxy:a55220002eb067754f75590963e932926dfe8613
+        image: asia.gcr.io/relaynovel-173804/sql-proxy:f0244f6db6e2dd79bed61733ed60d24d467bbc52
         resources:
           requests:
             cpu: 100m
