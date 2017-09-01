@@ -31,26 +31,26 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 
-	e.GET("/:id", httpResponse)
-	e.GET("/status/:id", httpResponse)
+	e.GET("/:statusCode", httpResponse)
+	e.GET("/status/:statusCode", httpResponse)
 
 	e.Logger.Fatal(e.Start(":80"))
 }
 
 // httpResponse エラー時のレスポンスを返す
 func httpResponse(c echo.Context) (err error) {
-	id, err := strconv.Atoi(c.Param("id"))
+	statusCode, err := strconv.Atoi(c.Param("statusCode"))
 	if err != nil {
-		id = http.StatusNotFound
+		statusCode = http.StatusNotFound
 	}
 
 	// 存在しないstatus_codeが来た場合は404
-	message := http.StatusText(id)
+	message := http.StatusText(statusCode)
 	if message == "" {
-		id = http.StatusNotFound
+		statusCode = http.StatusNotFound
 		message = http.StatusText(http.StatusNotFound)
 	}
 
-	response := response{Status: id, Message: message, Data: make([]int, 0)} // make([]int, 0)で空の配列を生成
-	return c.JSON(id, response)
+	response := response{Status: statusCode, Message: message, Data: make([]int, 0)} // make([]int, 0)で空の配列を生成
+	return c.JSON(statusCode, response)
 }
