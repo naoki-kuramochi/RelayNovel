@@ -50,15 +50,15 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 
-	e.GET("/novels/sentences/:id", getSentence)
-	e.POST("/novels/sentences", postSentence)
+	e.GET("/novels/:id/sentences", getSentence)
+	e.POST("/novels/:id/sentences", postSentence)
 
 	e.Logger.Fatal(e.Start(":80"))
 }
 
 // getSentence novelに紐づく文章を取得
 func getSentence(c echo.Context) (err error) {
-	id := c.Param("id")
+	id, _ := strconv.Atoi(c.Param("id"))
 	sentence := []sentence{}
 
 	session, err := createSession()
@@ -91,12 +91,20 @@ func getSentence(c echo.Context) (err error) {
 
 // postSentence novelに紐づく文章を投稿
 func postSentence(c echo.Context) (err error) {
+	id, _ := strconv.Atoi(c.Param("id"))
 	selectSentence := []sentence{}
 	insertSentence := sentence{}
+	checkSentence := sentence{}
 
 	err = c.Bind(&insertSentence)
 	if err != nil {
 		log.Printf("alert: " + err.Error())
+		errors, _ := fetchErrorResponse(http.StatusBadRequest)
+		return c.JSON(http.StatusBadRequest, errors)
+	}
+	// URLのIDとPOST値のIDが異なる場合はエラー
+	if insertSentence.NovelID != id {
+		log.Printf("alert: " + "URLのIDとPOST値のIDが異なるので処理を抜けます")
 		errors, _ := fetchErrorResponse(http.StatusBadRequest)
 		return c.JSON(http.StatusBadRequest, errors)
 	}
@@ -108,13 +116,33 @@ func postSentence(c echo.Context) (err error) {
 		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
-	// transction
+	// 同一の投稿者による連続登録はさせない
+	condition := dbr.And(dbr.Eq("sentence.novel_id", insertSentence.NovelID))
+	_, err = session.Select("sentence.novel_id", "sentence.novelist_id", "sentence.first_line", "sentence.second_line", "sentence.revision").
+		From("sentence").
+		Where(condition).
+		OrderBy("sentence.revision DESC").
+		Limit(1).
+		Load(&checkSentence)
+	if err != nil {
+		log.Printf("alert: " + err.Error())
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
+	}
+	if insertSentence.NovelistID == checkSentence.NovelistID {
+		log.Printf("alert: " + "同一投稿者による連投のため処理を抜けます" + strconv.Itoa(insertSentence.NovelistID) + ":" + strconv.Itoa(checkSentence.NovelistID))
+		errors, _ := fetchErrorResponse(http.StatusBadRequest)
+		return c.JSON(http.StatusBadRequest, errors)
+	}
+
+	// トランザクション開始
 	transaction, err := session.Begin()
 	if err != nil {
 		log.Printf("alert: " + err.Error())
 		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
 		return c.JSON(http.StatusInternalServerError, errors)
 	}
+	// トランザクション終了保証
 	defer transaction.RollbackUnlessCommitted()
 
 	result, err := transaction.InsertInto("sentence").
@@ -136,11 +164,12 @@ func postSentence(c echo.Context) (err error) {
 		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
-	condition := dbr.And(dbr.Eq("sentence.id", lastInsertID))
+	condition = dbr.And(dbr.Eq("sentence.id", lastInsertID))
 	count, err := session.Select("sentence.novel_id", "sentence.novelist_id", "sentence.first_line", "sentence.second_line", "sentence.revision").
 		From("sentence").
 		Where(condition).
 		OrderBy("sentence.revision DESC").
+		Limit(1).
 		Load(&selectSentence)
 	if err != nil {
 		log.Printf("alert: " + err.Error())
@@ -158,19 +187,19 @@ func postSentence(c echo.Context) (err error) {
 
 // fetchErrorResponse エラー時のレスポンスを生成
 func fetchErrorResponse(statusCode int) (errors, error) {
-	errorsApiResponse := errors{}
-	response, err := http.Get("http://status-api/" + strconv.Itoa(statusCode))
-	defer response.Body.Close()
+	errorsAPIResponse := errors{}
+	res, err := http.Get("http://status-api/" + strconv.Itoa(statusCode))
+	defer res.Body.Close()
 	if err != nil {
-		return errorsApiResponse, err
+		return errorsAPIResponse, err
 	}
 
-	err = json.NewDecoder(response.Body).Decode(&errorsApiResponse)
+	err = json.NewDecoder(res.Body).Decode(&errorsAPIResponse)
 	if err != nil {
-		return errorsApiResponse, err
+		return errorsAPIResponse, err
 	}
 
-	return errorsApiResponse, nil
+	return errorsAPIResponse, nil
 }
 
 // createSession dbr.Sessionを生成
@@ -179,3 +208,23 @@ func createSession() (*dbr.Session, error) {
 	session := connection.NewSession(nil)
 	return session, err
 }
+
+// insertPreconditionCheck insert可能な前提条件を判定
+//func insertPreconditionCheck(*dbr.Session, int) error {
+//	selectSentence := []sentence{}
+//	condition := dbr.And(dbr.Eq("sentence.novel_id", insertSentence.NovelID))
+//	_, err := session.Select("sentence.novelist_id", "sentence.revision").
+//		From("sentence").
+//		Where(condition).
+//		OrderBy("sentence.revision DESC").
+//		Limit(1).
+//		Load(&selectSentence)
+//	if err != nil {
+//		log.Printf("alert: " + err.Error())
+//		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+//	}
+//	// 同一ユーザによる連続投稿禁止
+//	if insertSentence.NovelistID == selectSentence.NovelistID {
+//		errors, _ := fetchErrorResponse(http.StatusNotFound)
+//	}
+//}
