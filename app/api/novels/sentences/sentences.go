@@ -16,6 +16,11 @@ import (
 )
 
 type (
+	limit struct {
+		RelayLimit    int `json:"-" db:"relay_limit"`
+		SentenceCount int `json:"-" db:"sentence_count"`
+	}
+
 	sentence struct {
 		FirstLine  string `json:"first_line" db:"first_line"`
 		SecondLine string `json:"second_line" db:"second_line"`
@@ -92,10 +97,8 @@ func getSentence(c echo.Context) (err error) {
 // postSentence novelに紐づく文章を投稿
 func postSentence(c echo.Context) (err error) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	selectSentence := []sentence{}
-	insertSentence := sentence{}
-	checkSentence := sentence{}
 
+	insertSentence := sentence{}
 	err = c.Bind(&insertSentence)
 	if err != nil {
 		log.Printf("alert: " + err.Error())
@@ -116,9 +119,25 @@ func postSentence(c echo.Context) (err error) {
 		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
+	// 投稿制限を超えての投稿はさせない
+	relayLimit := limit{}
+	condition := dbr.And(dbr.Eq("novel.id", insertSentence.NovelID))
+	_, err = session.Select("novel.relay_limit", "count(sentence.id) AS sentence_count").
+		From("novel").
+		Join("sentence", "novel.id = sentence.novel_id").
+		Where(condition).
+		Limit(1).
+		Load(&relayLimit)
+	if err != nil {
+		log.Printf("alert: " + err.Error())
+		errors, _ := fetchErrorResponse(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError, errors)
+	}
+
 	// 同一の投稿者による連続登録はさせない
-	condition := dbr.And(dbr.Eq("sentence.novel_id", insertSentence.NovelID))
-	_, err = session.Select("sentence.novel_id", "sentence.novelist_id", "sentence.first_line", "sentence.second_line", "sentence.revision").
+	checkSentence := sentence{}
+	condition = dbr.And(dbr.Eq("sentence.novel_id", insertSentence.NovelID))
+	_, err = session.Select("sentence.novelist_id").
 		From("sentence").
 		Where(condition).
 		OrderBy("sentence.revision DESC").
@@ -131,6 +150,11 @@ func postSentence(c echo.Context) (err error) {
 	}
 	if insertSentence.NovelistID == checkSentence.NovelistID {
 		log.Printf("alert: " + "同一投稿者による連投のため処理を抜けます" + strconv.Itoa(insertSentence.NovelistID) + ":" + strconv.Itoa(checkSentence.NovelistID))
+		errors, _ := fetchErrorResponse(http.StatusBadRequest)
+		return c.JSON(http.StatusBadRequest, errors)
+	}
+	if relayLimit.RelayLimit <= relayLimit.SentenceCount {
+		log.Printf("info: " + "投稿回数が上限に達してますので処理を抜けます" + strconv.Itoa(relayLimit.RelayLimit) + ":" + strconv.Itoa(relayLimit.SentenceCount))
 		errors, _ := fetchErrorResponse(http.StatusBadRequest)
 		return c.JSON(http.StatusBadRequest, errors)
 	}
@@ -164,6 +188,7 @@ func postSentence(c echo.Context) (err error) {
 		return c.JSON(http.StatusInternalServerError, errors)
 	}
 
+	selectSentence := []sentence{}
 	condition = dbr.And(dbr.Eq("sentence.id", lastInsertID))
 	count, err := session.Select("sentence.novel_id", "sentence.novelist_id", "sentence.first_line", "sentence.second_line", "sentence.revision").
 		From("sentence").
@@ -209,8 +234,8 @@ func createSession() (*dbr.Session, error) {
 	return session, err
 }
 
-// insertPreconditionCheck insert可能な前提条件を判定
-//func insertPreconditionCheck(*dbr.Session, int) error {
+// enablePost insert可能な前提条件を判定
+//func enablePost(*dbr.Session, int) (bool, error) {
 //	selectSentence := []sentence{}
 //	condition := dbr.And(dbr.Eq("sentence.novel_id", insertSentence.NovelID))
 //	_, err := session.Select("sentence.novelist_id", "sentence.revision").

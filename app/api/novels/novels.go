@@ -25,7 +25,7 @@ type (
 	sentence struct {
 		FirstLine  string `json:"first_line" db:"first_line"`
 		SecondLine string `json:"second_line" db:"second_line"`
-		Revision   string `json:"-" db:"revision"`
+		Revision   string `json:"revision" db:"revision"`
 		NovelID    int    `json:"-" db:"novel_id"`
 		NovelistID int    `json:"-" db:"novelist_id"`
 	}
@@ -69,6 +69,7 @@ func main() {
 	e.Use(middleware.Logger())
 
 	e.GET("/novels/:id", getNovels)
+	//e.POST("/novels/:id", getNovels)
 	e.Logger.Fatal(e.Start(":80"))
 }
 
@@ -116,7 +117,7 @@ func getNovels(c echo.Context) (err error) {
 // fetchSentence sentencesAPIを実行してdataを取得
 func fetchSentence(id string) (sentenceApiResponse, error) {
 	sentenceApiResponse := sentenceApiResponse{Data: []sentence{}}
-	response, err := http.Get("http://sentences-api/novels/sentences/" + id)
+	response, err := http.Get("http://sentences-api/novels/" + id + "/sentences")
 	defer response.Body.Close()
 	if err != nil {
 		return sentenceApiResponse, err
