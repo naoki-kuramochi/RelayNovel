@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: nginx-routing
-        image: asia.gcr.io/relaynovel-173804/reverse-proxy:3bf27e67620910780f00215a8ac853cc70de67ce
+        image: asia.gcr.io/relaynovel-173804/reverse-proxy:83f0f80015e5e592cd22c2a9b7b40a143a624a50
         resources:
           requests:
             cpu: 100m
