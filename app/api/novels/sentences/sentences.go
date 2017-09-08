@@ -25,8 +25,8 @@ type (
 		FirstLine  string `json:"first_line" db:"first_line"`
 		SecondLine string `json:"second_line" db:"second_line"`
 		Revision   string `json:"revision" db:"revision"`
-		NovelID    int    `json:"novel_id" db:"novel_id"`
-		NovelistID int    `json:"novelist_id" db:"novelist_id"`
+		NovelID    int    `json:"-" db:"novel_id"`
+		NovelistID int    `json:"-" db:"novelist_id"`
 	}
 
 	response struct {
