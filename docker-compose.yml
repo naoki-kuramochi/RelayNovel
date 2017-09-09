@@ -40,6 +40,16 @@ services:
       - ./app/api/status:/go/src/app
     command: go-wrapper run status.go
 
+  novelists-api:
+    container_name: novelists-api
+    build:
+      context: .
+      dockerfile: ./Dockerfiles/Dockerfile.novelists-api
+    volumes:
+      #only dev
+      - ./app/api/novelists:/go/src/app
+    command: go-wrapper run novelists.go
+
   sql-proxy:
     container_name: mysql-proxy
     build:
