@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: status-api
-        image: asia.gcr.io/relaynovel-173804/status-api:e46e9e8ef34be3296af245e370bce2ba59bb4d03
+        image: asia.gcr.io/relaynovel-173804/status-api:32ffdded7de8ebeebc9d9e29ddecae929bbf6896
         resources:
           requests:
             cpu: 100m
