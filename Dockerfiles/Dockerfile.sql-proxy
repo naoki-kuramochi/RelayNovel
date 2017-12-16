@@ -2,6 +2,5 @@ FROM gcr.io/cloudsql-docker/gce-proxy:1.09
 LABEL maintainer "osechiman@gmail.com"
 
 VOLUME ["/cloudsql"]
-COPY ./config/mysql/key/RelayNovel-2e8905f05fd5.json /config
-ENTRYPOINT ["/cloud_sql_proxy", "-credential_file=/config"]
-CMD ["-instances=relaynovel-173804:asia-east1:relay-novel=tcp:0.0.0.0:3306"]
+ENTRYPOINT ["/cloud_sql_proxy"]
+CMD ["-instances=relaynovel-173804:asia-east1:relay-novels=tcp:0.0.0.0:3306"]

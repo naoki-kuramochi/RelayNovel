@@ -3,7 +3,7 @@ LABEL maintainer "osechiman@gmail.com"
 
 WORKDIR /go/src/app
 COPY app/api/novels/sentences/sentences.go .
-ENV RELAYNOVEL_SESSION=root:Ngj9GbsC9yBHKHOI@tcp(mysql-proxy:3306)/RelayNovel
+ENV RELAYNOVEL_SESSION=root:osechiman@tcp(mysql-proxy:3306)/RelayNovel
 
 # package update
 RUN apk update
