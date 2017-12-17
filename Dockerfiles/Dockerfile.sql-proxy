@@ -1,4 +1,4 @@
-FROM gcr.io/cloudsql-docker/gce-proxy:1.08
+FROM gcr.io/cloudsql-docker/gce-proxy:1.09
 LABEL maintainer "osechiman@gmail.com"
 
 VOLUME ["/cloudsql"]
