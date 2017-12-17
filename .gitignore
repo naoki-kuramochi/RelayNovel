@@ -3,3 +3,4 @@ memo.md
 cloudsql
 node_modules
 vendor
+config/mysql/key/*

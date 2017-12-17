@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: novelists-api
-        image: asia.gcr.io/relaynovel-173804/novelists-api:32ffdded7de8ebeebc9d9e29ddecae929bbf6896
+        image: asia.gcr.io/relaynovel-173804/novelists-api:fb9c187a6fbad2402d6dc177e6fd8d1ccfe2b894
         resources:
           requests:
             cpu: 100m
